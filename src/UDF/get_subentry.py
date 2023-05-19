@@ -1,4 +1,4 @@
-from pyspark.sql import SparkSession
+# -*- coding: utf-8 -*-
 from pyspark.sql.functions import udf
 from pyspark.sql.types import StringType
 
@@ -53,20 +53,23 @@ dict_entry_map = {
 
 # 定义python查字典函数
 def get_subentry(data_source, sc_entry_no, sc_subentry):
-    try:
+    if data_source in dict_entry_map and \
+            sc_entry_no in dict_entry_map[data_source] and \
+            sc_subentry in dict_entry_map[data_source][sc_entry_no]:
         return dict_entry_map[data_source][sc_entry_no][sc_subentry]
-    except:
-        return sc_subentry
+    else:
+        return sc_subentry  # 字典里面没有就取自身
+
 
 # 注册到sparksql
+# udf_get_subentry = udf(get_subentry, StringType())
 
 
-# spark入口
-spark = SparkSession.builder \
-    .appName("HiveTest") \
-    .config("spark.sql.warehouse.dir", "hdfs://2eb73e38ef63:9000/user/hive/warehouse") \
-    .config("hive.metastore.uris", "thrift://hive-metastore:9083") \
-    .enableHiveSupport() \
-    .getOrCreate()
-
-# 测试udf
+# # spark入口
+# spark = SparkSession.builder \
+#     .appName("HiveTest") \
+#     .config("spark.sql.warehouse.dir", "hdfs://2eb73e38ef63:9000/user/hive/warehouse") \
+#     .config("hive.metastore.uris", "thrift://hive-metastore:9083") \
+#     .enableHiveSupport() \
+#     .getOrCreate()
+#
