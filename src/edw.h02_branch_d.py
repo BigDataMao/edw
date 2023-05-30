@@ -19,55 +19,6 @@ spark = SparkSession.builder \
 
 udf_get_subentry = spark.udf.register('udf_get_subentry', get_subentry, StringType())
 
-"""
-# sql风格
-spark.sql('''
-    truncate table edw.h02_branch_d
-''')
-
-spark.sql(f'''
-    insert into table edw.h02_branch_d(
-        branch_id,
-        branch_no,
-        branch_name,
-        up_branch_no,
-        branch_type,
-        local_no,
-        contact,
-        tel,
-        zipcode,
-        address,
-        data_source,
-        open_date,
-        brokers_id,
-        ds_date,
-        pro_code)
-    select
-        trim(a.departmentid),
-        trim(a.departmentid),
-        trim(a.departmentname),
-        case when trim(a.departmentid) = '00' then '-1'
-            when trim(a.departmentid) = 'FU' then '00'
-            when length(trim(a.departmentid)) = '2' then 'FU'
-            when length(trim(a.departmentid)) = '4' then substring(trim(a.departmentid), 1, 2)
-            when length(trim(a.departmentid)) = '6' then substring(trim(a.departmentid), 1, 4)
-            else substring(trim(a.departmentid), 1, 6)
-        end as up_branch_no,
-        '0',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '00',
-        '',
-        a.brokerid,
-        '{busi_date}' as busi_date,
-        ''
-    from ods.t_ctp20_department_d a;
-''')
-"""
-
 # DSL风格
 df = spark.table("ods.t_ctp20_department_d").select(
     trim(col("departmentid")).alias("branch_id"),
