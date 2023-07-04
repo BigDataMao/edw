@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from pyspark.sql.functions import udf
-from pyspark.sql.types import StringType
 
 # 字典:仅包含映射值不同的部分
 dict_entry_map = {

@@ -1,7 +1,10 @@
 from pyspark.sql.functions import *
+
+from UDF.create_env import create_env
 from UDF.get_subentry import get_subentry
 from UDF.parse_arguments import parse_arguments
-from UDF.create_env import create_env
+from pyspark.sql.types import StringType
+
 
 target_table = 'edw.h02_client_qh_d'  # 目标表
 busi_date = parse_arguments()  # 解析命令行参数

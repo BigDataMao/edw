@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from pyspark.sql import SparkSession
-from get_subentry import get_subentry
-from pyspark.sql.functions import udf
 from pyspark.sql.types import StringType
+
+from get_subentry import get_subentry
 
 # spark入口
 spark = SparkSession.builder \
