@@ -7,8 +7,9 @@ def create_env():
         .appName("HiveTest") \
         .master("local") \
         .config("spark.sql.warehouse.dir", "/user/hive/warehouse") \
-        .config("hive.metastore.uris", "thrift://master:9083") \
-        .config("hive.exec.scratchdir", "/user/hive/tmp") \
+        .config("spark.hadoop.hive.metastore.uris", "thrift://master:9083") \
+        .config("spark.hadoop.hive.exec.scratchdir", "/user/hive/tmp") \
         .enableHiveSupport() \
         .getOrCreate()
+    spark.sparkContext.setLogLevel("ERROR")
     return spark

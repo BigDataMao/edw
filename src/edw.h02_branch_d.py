@@ -1,25 +1,13 @@
 # -*- coding: utf-8 -*-
-# from pyspark.sql.types import StringType
-import argparse  # 导入argparse模块，用于解析命令行参数
-
-from pyspark.sql import SparkSession
+from pyspark.sql.types import StringType
 from pyspark.sql.functions import *
-
 from UDF.get_subentry import get_subentry
+from src.UDF.create_env import create_env
+from src.UDF.parse_arguments import parse_arguments
 
-parser = argparse.ArgumentParser()  # 创建解析对象
-parser.add_argument('--busi_date', help='business date parameter', default=None)  # 添加参数细节
-busi_date = parser.parse_args().busi_date  # 获取参数
-
-# spark入口
-spark = SparkSession.builder \
-    .appName("HiveTest") \
-    .config("spark.sql.warehouse.dir", "hdfs://567d88c67dac:9000/user/hive/warehouse") \
-    .config("hive.metastore.uris", "thrift://hive-metastore:9083") \
-    .enableHiveSupport() \
-    .getOrCreate()
-
-udf_get_subentry = spark.udf.register('udf_get_subentry', get_subentry, StringType())
+busi_date = parse_arguments()  # 解析命令行参数
+spark = create_env()  # spark入口
+udf_get_subentry = spark.udf.register('udf_get_subentry', get_subentry, returnType=StringType())
 
 # DSL风格
 df = spark.table("ods.t_ctp20_department_d").select(
