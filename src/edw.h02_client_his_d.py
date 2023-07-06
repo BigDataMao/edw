@@ -117,7 +117,7 @@ df_result = df.select(
 )
 
 # 获取目标表的元数据信息
-target_columns = [c.name for c in spark.table("target_table").schema]
+target_columns = [c.name for c in spark.table(target_table).schema]
 
 # 添加缺失的列并设置默认值
 for c in target_columns:
@@ -125,4 +125,4 @@ for c in target_columns:
         df_result = df_result.withColumn(c, lit(None))
 
 # 覆盖目标表中的数据
-df_result.select(target_columns).write.mode('overwrite').insertInto("target_table")
+df_result.select(target_columns).write.mode('overwrite').insertInto(target_table)
