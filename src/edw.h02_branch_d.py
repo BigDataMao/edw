@@ -2,8 +2,8 @@
 from pyspark.sql.types import StringType
 from pyspark.sql.functions import *
 from UDF.get_subentry import get_subentry
-from src.UDF.create_env import create_env
-from src.UDF.parse_arguments import parse_arguments
+from UDF.create_env import create_env
+from UDF.parse_arguments import parse_arguments
 
 busi_date = parse_arguments()  # 解析命令行参数
 spark = create_env()  # spark入口
