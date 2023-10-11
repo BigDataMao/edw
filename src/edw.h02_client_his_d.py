@@ -1,12 +1,13 @@
 from pyspark.sql.functions import *
 
-from UDF.create_env import create_env
+from UDF.task_env import create_env, return_to_hive
 from UDF.get_subentry import get_subentry
 from UDF.parse_arguments import parse_arguments
 from pyspark.sql.types import StringType
 
 
 target_table = 'edw.h02_client_qh_d'  # 目标表
+insert_mode = "overwrite"  # 插入模式
 busi_date = parse_arguments()  # 解析命令行参数
 spark = create_env()  # spark入口
 udf_get_subentry = spark.udf.register('udf_get_subentry', get_subentry, StringType())  # 注册自定义函数
@@ -116,13 +117,5 @@ df_result = df.select(
     coalesce(trim(df_cap['licenseno']), trim(df_ctp['licenseno'])).alias('license_no'),  # 许可证
 )
 
-# 获取目标表的元数据信息
-target_columns = [c.name for c in spark.table(target_table).schema]
-
-# 添加缺失的列并设置默认值
-for c in target_columns:
-    if c not in df_result.columns:
-        df_result = df_result.withColumn(c, lit(None))
-
-# 覆盖目标表中的数据
-df_result.select(target_columns).write.mode('overwrite').insertInto(target_table)
+# 写入hive
+return_to_hive(spark, df_result, target_table, insert_mode)
