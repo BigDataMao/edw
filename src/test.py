@@ -1,3 +1,5 @@
+import pyspark.sql.functions
+
 from UDF.create_env import create_env
 
 create_env().sql('show databases').show(5)

@@ -126,4 +126,3 @@ for c in target_columns:
 
 # 覆盖目标表中的数据
 df_result.select(target_columns).write.mode('overwrite').insertInto(target_table)
-
