@@ -6,7 +6,8 @@ def main():
     spark = create_env()
 
     # 运行 a.py 任务
-    spark.runPyFile("edw.h02_branch_d.py")
+    spark.run_task('a')
+
 
 if __name__ == "__main__":
     main()
